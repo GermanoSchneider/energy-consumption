@@ -1,6 +1,6 @@
 package com.example.energy_consumption.domain;
 
-enum Status {
+public enum Status {
     ON,
     OFF
 }
