@@ -19,6 +19,7 @@ public class ElectronicFixture {
     private static ElectronicBuilder builder() {
 
         return Electronic.builder()
+            .id(1L)
             .name("Computer")
             .status(Status.ON);
     }

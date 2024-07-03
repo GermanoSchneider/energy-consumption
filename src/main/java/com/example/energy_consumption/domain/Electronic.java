@@ -14,6 +14,9 @@ import lombok.Value;
 @AllArgsConstructor(access = PRIVATE)
 public class Electronic {
 
+    @NotNull(message = "should not be null")
+    Long id;
+
     @NotBlank(message = "should not be blank")
     String name;
 
@@ -25,6 +28,7 @@ public class Electronic {
         public Electronic build() {
 
             var electronic = new Electronic(
+                this.id,
                 this.name,
                 this.status
             );
