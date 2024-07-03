@@ -1,11 +1,9 @@
-package com.example.energy_consumption.domain;
+package com.example.energyconsumption.domain;
 
-import static java.time.LocalDate.*;
+import static java.time.LocalDate.now;
 import static lombok.AccessLevel.PRIVATE;
 
-import com.example.energy_consumption.domain.Consumption.ConsumptionBuilder;
-import com.example.energy_consumption.domain.Electronic.ElectronicBuilder;
-import java.time.LocalDate;
+import com.example.energyconsumption.domain.Consumption.ConsumptionBuilder;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = PRIVATE)
@@ -13,6 +11,12 @@ public class ConsumptionFixture {
 
     public static Consumption build() {
         return builder().build();
+    }
+
+    public static Consumption buildWith(Electronic electronic) {
+        return builder()
+            .electronic(electronic)
+            .build();
     }
 
     public static void buildInvalid() {

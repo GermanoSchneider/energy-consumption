@@ -1,6 +1,6 @@
-package com.example.energy_consumption.domain;
+package com.example.energyconsumption.domain;
 
-import static com.example.energy_consumption.domain.ConstraintValidator.validate;
+import static com.example.energyconsumption.domain.ConstraintValidator.validate;
 import static lombok.AccessLevel.PRIVATE;
 
 import jakarta.validation.constraints.NotBlank;

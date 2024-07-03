@@ -1,8 +1,8 @@
-package com.example.energy_consumption.infra.persistence;
+package com.example.energyconsumption.infra.persistence.electronic;
 
 import static jakarta.persistence.EnumType.STRING;
 
-import com.example.energy_consumption.domain.Status;
+import com.example.energyconsumption.domain.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "t_electronic")
-class ElectronicEntity {
+public class ElectronicEntity {
 
     @Id
     private Long id;

@@ -1,4 +1,4 @@
-package com.example.energy_consumption.domain;
+package com.example.energyconsumption.domain;
 
 import static java.util.Arrays.stream;
 import static org.assertj.core.api.Assertions.assertThat;

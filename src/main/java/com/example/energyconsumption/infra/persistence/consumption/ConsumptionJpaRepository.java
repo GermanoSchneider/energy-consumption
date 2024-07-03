@@ -1,8 +1,8 @@
-package com.example.energy_consumption.infra.persistence;
+package com.example.energyconsumption.infra.persistence.consumption;
 
 import java.util.Collection;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ConsumptionRepository extends JpaRepository<ConsumptionEntity, Long> {
+interface ConsumptionJpaRepository extends JpaRepository<ConsumptionEntity, Long> {
     Collection<ConsumptionEntity> findByElectronicId(Long id);
 }

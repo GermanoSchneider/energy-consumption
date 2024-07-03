@@ -1,4 +1,4 @@
-package com.example.energy_consumption.domain;
+package com.example.energyconsumption.domain;
 
 import static jakarta.validation.Validation.buildDefaultValidatorFactory;
 
