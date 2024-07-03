@@ -6,6 +6,7 @@ import static com.example.energy_consumption.infra.persistence.ElectronicEntityF
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -17,6 +18,7 @@ class ElectronicRepositoryTest {
     private ElectronicRepository repository;
 
     @Test
+    @DisplayName("find all electronics in the database")
     void shouldFindAllElectronics() {
 
         ElectronicEntity[] expectedElectronics = {

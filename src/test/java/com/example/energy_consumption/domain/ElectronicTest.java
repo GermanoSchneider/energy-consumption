@@ -1,7 +1,8 @@
 package com.example.energy_consumption.domain;
 
+import static java.util.Arrays.stream;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import jakarta.validation.ConstraintViolationException;
@@ -25,11 +26,15 @@ class ElectronicTest {
             ElectronicFixture::buildInvalid
         );
 
-        String expectedMessage = "power: should not be null, "
-            + "id: should not be null, "
-            + "name: should not be blank, "
-            + "status: should not be null";
+        String[] messages = exception.getMessage().split(", ");
 
-        assertEquals(expectedMessage, exception.getMessage());
+        String[] expectedMessages = {
+            "power: should not be null",
+            "id: should not be null",
+            "name: should not be blank",
+            "status: should not be null"
+        };
+
+        assertThat(messages).hasSameElementsAs(stream(expectedMessages).toList());
     }
 }
