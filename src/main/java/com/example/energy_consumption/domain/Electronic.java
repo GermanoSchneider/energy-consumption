@@ -21,6 +21,9 @@ public class Electronic {
     String name;
 
     @NotNull(message = "should not be null")
+    Double power;
+
+    @NotNull(message = "should not be null")
     Status status;
 
     public static class ElectronicBuilder {
@@ -30,6 +33,7 @@ public class Electronic {
             var electronic = new Electronic(
                 this.id,
                 this.name,
+                this.power,
                 this.status
             );
 

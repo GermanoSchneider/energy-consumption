@@ -25,7 +25,10 @@ class ElectronicTest {
             ElectronicFixture::buildInvalid
         );
 
-        String expectedMessage = "id: should not be null, name: should not be blank, status: should not be null";
+        String expectedMessage = "power: should not be null, "
+            + "id: should not be null, "
+            + "name: should not be blank, "
+            + "status: should not be null";
 
         assertEquals(expectedMessage, exception.getMessage());
     }
