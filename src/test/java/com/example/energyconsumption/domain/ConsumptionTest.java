@@ -68,7 +68,7 @@ class ConsumptionTest {
             .electronic(electronic)
             .build();
 
-        assertThat(expectedKilowatts)
-            .isEqualTo(consumption.getKilowatts());
+        assertThat(consumption.getKilowatts())
+            .isEqualTo(expectedKilowatts);
     }
 }
