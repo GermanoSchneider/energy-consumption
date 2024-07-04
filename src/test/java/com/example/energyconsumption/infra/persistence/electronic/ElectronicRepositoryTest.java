@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Import;
 
@@ -21,6 +22,9 @@ class ElectronicRepositoryTest {
 
     @Autowired
     private ElectronicRepository repository;
+
+    @Autowired
+    private TestEntityManager entityManager;
 
     @SpyBean
     private ElectronicMapper mapper;
@@ -38,5 +42,17 @@ class ElectronicRepositoryTest {
         Collection<Electronic> electronics = repository.findAll();
 
         assertThat(expectedElectronics).hasSameElementsAs(electronics);
+    }
+
+    @Test
+    @DisplayName("update the electronic status")
+    void shouldUpdateElectronicStatus() {
+
+        repository.updateStatus(1L, ON);
+
+        ElectronicEntity electronic = entityManager.find(ElectronicEntity.class, 1L);
+
+        assertThat(electronic).isNotNull();
+        assertThat(electronic.getStatus()).isEqualTo(ON);
     }
 }
