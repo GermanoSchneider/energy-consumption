@@ -11,7 +11,7 @@ public class ElectronicMapper {
         return Electronic.builder()
             .id(entity.getId())
             .name(entity.getName())
-            .power(entity.getPower())
+            .powerWatts(entity.getPowerWatts())
             .status(entity.getStatus())
             .build();
     }
@@ -21,7 +21,7 @@ public class ElectronicMapper {
         return new ElectronicEntity(
           consumption.getId(),
           consumption.getName(),
-          consumption.getPower(),
+          consumption.getPowerWatts(),
           consumption.getStatus()
         );
     }

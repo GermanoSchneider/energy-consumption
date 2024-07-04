@@ -23,7 +23,7 @@ public class ConsumptionFixture {
 
         return Consumption.builder()
             .id(1L)
-            .kilowatts(15.2)
+            .kilowatts(0.0)
             .initialTime(currentTime)
             .endTime(currentTime.plusHours(1))
             .electronic(ElectronicFixture.build());

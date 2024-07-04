@@ -3,6 +3,7 @@ package com.example.energyconsumption.infra.persistence.electronic;
 import static jakarta.persistence.EnumType.STRING;
 
 import com.example.energyconsumption.domain.Status;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
@@ -25,7 +26,8 @@ public class ElectronicEntity {
 
     private String name;
 
-    private double power;
+    @Column(name = "power_watts")
+    private double powerWatts;
 
     @Enumerated(STRING)
     private Status status;

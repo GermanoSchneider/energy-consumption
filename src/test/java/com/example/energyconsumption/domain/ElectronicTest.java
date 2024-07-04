@@ -29,12 +29,20 @@ class ElectronicTest {
         String[] messages = exception.getMessage().split(", ");
 
         String[] expectedMessages = {
-            "power: should not be null",
+            "powerWatts: should not be null",
             "id: should not be null",
             "name: should not be blank",
             "status: should not be null"
         };
 
         assertThat(messages).hasSameElementsAs(stream(expectedMessages).toList());
+    }
+
+    @Test
+    @DisplayName("validate when the electronic is on")
+    void shouldBeOn() {
+
+       Electronic electronic = ElectronicFixture.build();
+       assertThat(electronic.isOn()).isTrue();
     }
 }

@@ -10,7 +10,7 @@ import lombok.Builder;
 import lombok.Value;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor(access = PRIVATE)
 public class Electronic {
 
@@ -21,10 +21,19 @@ public class Electronic {
     String name;
 
     @NotNull(message = "should not be null")
-    Double power;
+    Double powerWatts;
 
     @NotNull(message = "should not be null")
     Status status;
+
+    public Double getPowerKilowatts() {
+
+        return powerWatts / 1000.0;
+    }
+
+    public boolean isOn() {
+        return status == Status.ON;
+    }
 
     public static class ElectronicBuilder {
 
@@ -33,7 +42,7 @@ public class Electronic {
             var electronic = new Electronic(
                 this.id,
                 this.name,
-                this.power,
+                this.powerWatts,
                 this.status
             );
 

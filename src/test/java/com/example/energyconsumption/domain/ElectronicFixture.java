@@ -21,7 +21,7 @@ public class ElectronicFixture {
         return builder()
             .id(id)
             .name(name)
-            .power(power)
+            .powerWatts(power)
             .status(status)
             .build();
     }
@@ -35,7 +35,7 @@ public class ElectronicFixture {
         return Electronic.builder()
             .id(1L)
             .name("Computer")
-            .power(15.5)
+            .powerWatts(15.0)
             .status(Status.ON);
     }
 }
