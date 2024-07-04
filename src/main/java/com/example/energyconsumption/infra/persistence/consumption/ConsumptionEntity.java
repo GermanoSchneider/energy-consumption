@@ -8,7 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,8 +28,11 @@ public class ConsumptionEntity {
 
     private Double kilowatts;
 
-    @Column(name = "creation_date")
-    private LocalDate date;
+    @Column(name = "initial_time")
+    private LocalDateTime initialTime;
+
+    @Column(name = "end_time")
+    private LocalDateTime endTime;
 
     @ManyToOne
     private ElectronicEntity electronic;

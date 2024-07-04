@@ -32,7 +32,8 @@ class ConsumptionTest {
             "electronic: should not be null",
             "kilowatts: should not be null",
             "id: should not be null",
-            "date: should not be null"
+            "initialTime: should not be null",
+            "endTime: should not be null"
         };
 
         assertThat(messages).hasSameElementsAs(stream(expectedMessages).toList());

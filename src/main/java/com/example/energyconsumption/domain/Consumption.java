@@ -4,7 +4,7 @@ import static com.example.energyconsumption.domain.ConstraintValidator.validate;
 import static lombok.AccessLevel.PRIVATE;
 
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -21,7 +21,10 @@ public class Consumption {
     Double kilowatts;
 
     @NotNull(message = "should not be null")
-    LocalDate date;
+    LocalDateTime initialTime;
+
+    @NotNull(message = "should not be null")
+    LocalDateTime endTime;
 
     @NotNull(message = "should not be null")
     Electronic electronic;
@@ -33,7 +36,8 @@ public class Consumption {
             var consumption = new Consumption(
                 this.id,
                 this.kilowatts,
-                this.date,
+                this.initialTime,
+                this.endTime,
                 this.electronic
             );
 

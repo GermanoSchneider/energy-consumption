@@ -1,9 +1,9 @@
 package com.example.energyconsumption.infra.persistence.consumption;
 
-import static java.time.LocalDate.now;
 import static lombok.AccessLevel.PRIVATE;
 
 import com.example.energyconsumption.infra.persistence.electronic.ElectronicEntityFixture;
+import java.time.LocalDateTime;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = PRIVATE)
@@ -11,10 +11,15 @@ class ConsumptionEntityFixture {
 
     static ConsumptionEntity build() {
 
+        LocalDateTime currentTime = LocalDateTime.now()
+            .minusSeconds(0)
+            .minusNanos(0);
+
         return new ConsumptionEntity(
             null,
             30.5,
-            now(),
+            currentTime,
+            currentTime.plusHours(1),
             ElectronicEntityFixture.build()
         );
     }
