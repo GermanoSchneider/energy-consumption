@@ -17,7 +17,6 @@ class ConsumptionMapper {
 
         return Consumption.builder()
             .id(entity.getId())
-            .kilowatts(entity.getKilowatts())
             .initialTime(entity.getInitialTime())
             .endTime(entity.getEndTime())
             .electronic(mapper.fromEntity(entity.getElectronic()))
@@ -27,8 +26,7 @@ class ConsumptionMapper {
     ConsumptionEntity toEntity(Consumption consumption) {
 
         return new ConsumptionEntity(
-          null,
-          consumption.getKilowatts(),
+          consumption.getId(),
           consumption.getInitialTime(),
           consumption.getEndTime(),
           mapper.toEntity(consumption.getElectronic())

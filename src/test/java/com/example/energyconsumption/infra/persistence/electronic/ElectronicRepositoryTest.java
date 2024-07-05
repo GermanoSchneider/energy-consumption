@@ -6,8 +6,10 @@ import static com.example.energyconsumption.domain.Status.ON;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.energyconsumption.domain.Electronic;
+import com.example.energyconsumption.domain.ElectronicFixture;
 import com.example.energyconsumption.domain.ElectronicRepository;
 import java.util.Collection;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,14 +47,14 @@ class ElectronicRepositoryTest {
     }
 
     @Test
-    @DisplayName("update the electronic status")
-    void shouldUpdateElectronicStatus() {
+    @DisplayName("find electronic by ID")
+    void shouldFindElectronicByID() {
 
-        repository.updateStatus(1L, ON);
+        Electronic expectedElectronic = ElectronicFixture.build();
 
-        ElectronicEntity electronic = entityManager.find(ElectronicEntity.class, 1L);
+        Optional<Electronic> electronic = repository.findBy(1L);
 
         assertThat(electronic).isNotNull();
-        assertThat(electronic.getStatus()).isEqualTo(ON);
+        assertThat(expectedElectronic).isEqualTo(electronic.get());
     }
 }

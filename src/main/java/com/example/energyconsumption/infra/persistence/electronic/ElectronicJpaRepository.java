@@ -10,4 +10,6 @@ public interface ElectronicJpaRepository extends JpaRepository<ElectronicEntity,
     @Modifying
     @Query("UPDATE ElectronicEntity e SET e.status = ?2 WHERE e.id = ?1")
     void updateStatus(Long id, Status status);
+
+    Status findStatusById(Long id);
 }

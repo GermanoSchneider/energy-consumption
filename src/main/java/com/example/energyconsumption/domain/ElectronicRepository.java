@@ -1,10 +1,11 @@
 package com.example.energyconsumption.domain;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface ElectronicRepository {
 
     Collection<Electronic> findAll();
 
-    void updateStatus(Long id, Status status);
+    Optional<Electronic> findBy(Long id);
 }

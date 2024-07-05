@@ -2,8 +2,8 @@ package com.example.energyconsumption.infra.persistence.electronic;
 
 import com.example.energyconsumption.domain.Electronic;
 import com.example.energyconsumption.domain.ElectronicRepository;
-import com.example.energyconsumption.domain.Status;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 
@@ -28,7 +28,9 @@ class ElectronicRepositoryImpl implements ElectronicRepository {
     }
 
     @Override
-    public void updateStatus(Long id, Status status) {
-        repository.updateStatus(id, status);
+    public Optional<Electronic> findBy(Long id) {
+
+        return repository.findById(id)
+                .map(mapper::fromEntity);
     }
 }

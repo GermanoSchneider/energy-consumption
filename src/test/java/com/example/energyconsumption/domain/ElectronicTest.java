@@ -43,7 +43,7 @@ class ElectronicTest {
     void shouldBeOn() {
 
        Electronic electronic = ElectronicFixture.build();
-       assertThat(electronic.isOn()).isTrue();
+       assertThat(electronic.isOn()).isFalse();
     }
 
     @Test

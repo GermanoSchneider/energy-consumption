@@ -26,8 +26,6 @@ public class ConsumptionEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private Double kilowatts;
-
     @Column(name = "initial_time")
     private LocalDateTime initialTime;
 

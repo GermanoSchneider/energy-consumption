@@ -35,7 +35,7 @@ public class ElectronicFixture {
         return Electronic.builder()
             .id(1L)
             .name("Computer")
-            .powerWatts(15.0)
-            .status(Status.ON);
+            .powerWatts(15.5)
+            .status(Status.OFF);
     }
 }

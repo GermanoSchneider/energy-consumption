@@ -1,6 +1,6 @@
 package com.example.energyconsumption.infra.persistence.electronic;
 
-import static com.example.energyconsumption.domain.Status.ON;
+import static com.example.energyconsumption.domain.Status.OFF;
 import static lombok.AccessLevel.PRIVATE;
 
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ public class ElectronicEntityFixture {
             1L,
             "Computer",
             15.5,
-            ON
+            OFF
         );
     }
 }

@@ -17,7 +17,6 @@ class ConsumptionEntityFixture {
 
         return new ConsumptionEntity(
             null,
-            30.5,
             currentTime,
             currentTime.plusHours(1),
             ElectronicEntityFixture.build()

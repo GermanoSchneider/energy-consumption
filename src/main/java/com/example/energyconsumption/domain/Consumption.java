@@ -16,11 +16,7 @@ import lombok.experimental.NonFinal;
 @AllArgsConstructor(access = PRIVATE)
 public class Consumption {
 
-    @NotNull(message = "should not be null")
     Long id;
-
-    @NotNull(message = "should not be null")
-    Double kilowatts;
 
     @NotNull(message = "should not be null")
     LocalDateTime initialTime;
@@ -46,7 +42,6 @@ public class Consumption {
 
             var consumption = new Consumption(
                 this.id,
-                this.kilowatts,
                 this.initialTime,
                 this.endTime,
                 this.electronic
