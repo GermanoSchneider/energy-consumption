@@ -6,6 +6,7 @@ import com.example.energyconsumption.domain.Electronic;
 import com.example.energyconsumption.domain.ElectronicRepository;
 import com.example.energyconsumption.domain.EnergyConsumptionService;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,11 @@ public class ElectronicApplicationService {
         } else {
             throw new RuntimeException("Electronic device does not exist");
         }
+    }
+
+    public Collection<Electronic> findAll() {
+
+        return electronicRepository.findAll();
     }
 
     private Consumption buildConsumption(Electronic electronic) {
