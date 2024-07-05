@@ -5,9 +5,9 @@ import com.example.energyconsumption.domain.ConsumptionRepository;
 import com.example.energyconsumption.domain.Electronic;
 import com.example.energyconsumption.domain.ElectronicRepository;
 import com.example.energyconsumption.domain.EnergyConsumptionService;
+import com.example.energyconsumption.domain.Status;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,29 +31,48 @@ public class ElectronicApplicationService {
 
     public void powerOn(Long electronicId) {
 
-        Optional<Electronic> electronicOptional = electronicRepository.findBy(electronicId);
+        Electronic electronic = electronicRepository.findBy(electronicId);
+        if (electronic.isOn()) throw new RuntimeException(electronic.getName() + " is already powered on");
 
-        if (electronicOptional.isPresent()) {
-            Electronic electronic = electronicOptional.get();
-            if (electronic.isOn()) throw new RuntimeException(electronic.getName() + " is already powered on");
-            Consumption consumption = consumptionRepository.create(buildConsumption(electronic));
-            energyConsumptionService.start(consumption);
-        } else {
-            throw new RuntimeException("Electronic device does not exist");
-        }
+        Electronic electronicWithStatusOn = electronic.toBuilder().status(Status.ON).build();
+        Electronic updatedElectronic = electronicRepository.update(electronicWithStatusOn);
+
+        Consumption consumption = Consumption.builder()
+            .initialTime(LocalDateTime.now())
+            .electronic(updatedElectronic)
+            .build();
+
+        Consumption createdConsumption = consumptionRepository.create(consumption);
+        energyConsumptionService.start(createdConsumption);
     }
 
-    public Collection<Electronic> findAll() {
+    public Collection<Electronic> getAllElectronics() {
 
         return electronicRepository.findAll();
     }
 
-    private Consumption buildConsumption(Electronic electronic) {
+    public Collection<Consumption> getAllConsumptionsBy(Long electronicId) {
 
-        return Consumption.builder()
-            .initialTime(LocalDateTime.now())
-            .electronic(electronic)
-            .build();
+        return consumptionRepository.findBy(electronicId);
     }
 
+    public void powerOff(Long electronicId) {
+
+        Electronic electronic = electronicRepository.findBy(electronicId);
+        if (electronic.isOff()) throw new RuntimeException(electronic.getName() + " is already powered off");
+
+        Electronic electronicWithStatusOff = electronic.toBuilder().status(Status.OFF).build();
+        Electronic updatedElectronic = electronicRepository.update(electronicWithStatusOff);
+
+        Consumption consumption = consumptionRepository.findLastBy(electronicId);
+
+        Consumption consumptionWithEndTime = consumption.toBuilder()
+            .endTime(LocalDateTime.now())
+            .electronic(updatedElectronic)
+            .build();
+
+        Consumption updatedConsumption = consumptionRepository.update(consumptionWithEndTime);
+
+        energyConsumptionService.stop(updatedConsumption);
+    }
 }

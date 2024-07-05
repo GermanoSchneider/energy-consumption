@@ -35,6 +35,10 @@ public class Electronic {
         return status == Status.ON;
     }
 
+    public boolean isOff() {
+        return status == Status.OFF;
+    }
+
     public static class ElectronicBuilder {
 
         public Electronic build() {

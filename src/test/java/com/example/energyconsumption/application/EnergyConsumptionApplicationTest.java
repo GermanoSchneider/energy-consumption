@@ -8,9 +8,9 @@ import com.example.energyconsumption.domain.ElectronicFixture;
 import com.example.energyconsumption.domain.ElectronicRepository;
 import com.example.energyconsumption.domain.EnergyConsumptionService;
 import com.example.energyconsumption.domain.Status;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,16 +46,28 @@ class EnergyConsumptionApplicationTest {
 
         Electronic electronic = ElectronicFixture.build();
 
+        Electronic updateElectronic = electronic.toBuilder()
+            .status(Status.ON)
+            .build();
+
         Long electronicId = electronic.getId();
 
         Consumption consumption = ConsumptionFixture.build()
             .toBuilder()
             .id(null)
             .endTime(null)
-            .electronic(electronic)
+            .electronic(updateElectronic)
             .build();
 
-        Mockito.doReturn(Optional.of(electronic))
+        Mockito.doReturn(electronic)
+            .when(electronicRepository)
+            .findBy(electronicId);
+
+        Mockito.doReturn(updateElectronic)
+            .when(electronicRepository)
+            .update(updateElectronic);
+
+        Mockito.doReturn(electronic)
             .when(electronicRepository)
             .findBy(electronicId);
 
@@ -75,33 +87,9 @@ class EnergyConsumptionApplicationTest {
                 .isEqualTo(consumptionArgumentCaptor.getValue());
 
         Mockito.verify(electronicRepository).findBy(electronicId);
+        Mockito.verify(electronicRepository).update(updateElectronic);
         Mockito.verify(consumptionRepository).create(consumptionArgumentCaptor.capture());
         Mockito.verify(energyConsumptionService).start(consumption);
-    }
-
-    @Test
-    @DisplayName("should thrown an exception when a electronic could not be found")
-    void shouldThrowExceptionWhenElectronicCouldNotBeFound() {
-
-        Electronic electronic = ElectronicFixture.build()
-            .toBuilder()
-            .id(20L)
-            .build();
-
-        Long electronicId = electronic.getId();
-
-        Mockito.doReturn(Optional.empty())
-            .when(electronicRepository)
-            .findBy(electronicId);
-
-        String expectedMessage = "Electronic device does not exist";
-
-        Exception exception = org.junit.jupiter.api.Assertions.assertThrows(
-            RuntimeException.class, () ->
-                electronicApplicationService.powerOn(electronicId)
-        );
-
-        Assertions.assertThat(exception.getMessage()).isEqualTo(expectedMessage);
     }
 
     @Test
@@ -115,7 +103,7 @@ class EnergyConsumptionApplicationTest {
 
         Long electronicId = electronic.getId();
 
-        Mockito.doReturn(Optional.of(electronic))
+        Mockito.doReturn(electronic)
             .when(electronicRepository)
             .findBy(electronicId);
 
@@ -133,12 +121,114 @@ class EnergyConsumptionApplicationTest {
     @DisplayName("should power off the electronic and stop to consume energy")
     void shouldPowerOffElectronic() {
 
+        Electronic electronic = ElectronicFixture.build()
+            .toBuilder()
+            .status(Status.ON)
+            .build();
+
+        Electronic updatedElectronic = electronic.toBuilder()
+            .status(Status.OFF)
+            .build();
+
+        Long electronicId = electronic.getId();
+
+        Consumption consumption = ConsumptionFixture.build()
+            .toBuilder()
+            .endTime(null)
+            .electronic(electronic)
+            .build();
+
+        Consumption updatedConsumption = consumption
+            .toBuilder()
+            .endTime(LocalDateTime.now())
+                .electronic(updatedElectronic)
+            .build();
+
+        Mockito.doReturn(electronic)
+            .when(electronicRepository)
+            .findBy(electronicId);
+
+        Mockito.doReturn(updatedElectronic)
+            .when(electronicRepository)
+            .update(updatedElectronic);
+
+        Mockito.doReturn(consumption)
+                .when(consumptionRepository)
+                .findLastBy(electronicId);
+
+        Mockito.doReturn(updatedConsumption)
+            .when(consumptionRepository)
+            .update(consumptionArgumentCaptor.capture());
+
+        electronicApplicationService.powerOff(electronicId);
+
+        Assertions.assertThat(updatedConsumption)
+                .usingRecursiveComparison()
+                .ignoringFields("endTime")
+                .isEqualTo(consumptionArgumentCaptor.getValue());
+
+        Mockito.verify(electronicRepository).findBy(electronicId);
+        Mockito.verify(electronicRepository).update(updatedElectronic);
+        Mockito.verify(consumptionRepository).findLastBy(electronicId);
+        Mockito.verify(consumptionRepository).update(consumptionArgumentCaptor.getValue());
+        Mockito.verify(energyConsumptionService).stop(updatedConsumption);
+    }
+
+    @Test
+    @DisplayName("should thrown an exception when a electronic it's already powered off")
+    void shouldThrowExceptionWhenElectronicIsPoweredOff() {
+
+        Electronic electronic = ElectronicFixture.build()
+            .toBuilder()
+            .status(Status.OFF)
+            .build();
+
+        Long electronicId = electronic.getId();
+
+        Mockito.doReturn(electronic)
+            .when(electronicRepository)
+            .findBy(electronicId);
+
+        String expectedMessage = "Computer is already powered off";
+
+        Exception exception = org.junit.jupiter.api.Assertions.assertThrows(
+            RuntimeException.class, () -> electronicApplicationService.powerOff(electronicId)
+        );
+
+        Assertions.assertThat(exception.getMessage()).isEqualTo(expectedMessage);
     }
 
     @Test
     @DisplayName("should find a consumption by electronic ID")
     void shouldFindConsumptionByElectronicID() {
 
+        Electronic electronic = ElectronicFixture.build();
+        Long electronicId = electronic.getId();
+
+        Consumption firstConsumption = ConsumptionFixture.build().toBuilder()
+            .electronic(electronic)
+            .build();
+
+        Consumption secondConsumption = ConsumptionFixture.build().toBuilder()
+            .id(2L)
+            .electronic(electronic)
+            .build();
+
+        Collection<Consumption> expectedConsumptions = new ArrayList<>();
+
+        expectedConsumptions.add(firstConsumption);
+        expectedConsumptions.add(secondConsumption);
+
+        Mockito.doReturn(expectedConsumptions)
+            .when(consumptionRepository)
+            .findBy(electronicId);
+
+        Collection<Consumption> consumptions = electronicApplicationService
+            .getAllConsumptionsBy(electronicId);
+
+        Assertions.assertThat(expectedConsumptions).hasSameElementsAs(consumptions);
+
+        Mockito.verify(consumptionRepository).findBy(electronicId);
     }
 
     @Test
@@ -161,8 +251,10 @@ class EnergyConsumptionApplicationTest {
             .when(electronicRepository)
             .findAll();
 
-        Collection<Electronic> electronics = electronicApplicationService.findAll();
+        Collection<Electronic> electronics = electronicApplicationService.getAllElectronics();
 
         Assertions.assertThat(expectedElectronics).hasSameElementsAs(electronics);
+
+        Mockito.verify(electronicRepository).findAll();
     }
 }

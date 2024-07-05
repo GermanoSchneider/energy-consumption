@@ -27,7 +27,21 @@ class ConsumptionRepositoryImpl implements ConsumptionRepository {
     }
 
     @Override
+    public Consumption findLastBy(Long electronicId) {
+
+        return mapper.fromEntity(repository.findLastBy(electronicId));
+    }
+
+    @Override
     public Consumption create(Consumption consumption) {
+
+        ConsumptionEntity entity = mapper.toEntity(consumption);
+
+        return mapper.fromEntity(repository.save(entity));
+    }
+
+    @Override
+    public Consumption update(Consumption consumption) {
 
         ConsumptionEntity entity = mapper.toEntity(consumption);
 

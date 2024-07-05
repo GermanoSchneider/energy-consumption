@@ -47,6 +47,14 @@ class ElectronicTest {
     }
 
     @Test
+    @DisplayName("validate when the electronic is off")
+    void shouldBeOff() {
+
+        Electronic electronic = ElectronicFixture.build();
+        assertThat(electronic.isOff()).isTrue();
+    }
+
+    @Test
     @DisplayName("should convert the power watts to kilowatts")
     void shouldReturnPowerInKilowatts() {
 

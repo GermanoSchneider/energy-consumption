@@ -28,9 +28,20 @@ class ElectronicRepositoryImpl implements ElectronicRepository {
     }
 
     @Override
-    public Optional<Electronic> findBy(Long id) {
+    public Electronic findBy(Long id) {
 
-        return repository.findById(id)
-                .map(mapper::fromEntity);
+        Optional<ElectronicEntity> entity = repository.findById(id);
+
+        if (entity.isEmpty()) throw new RuntimeException("Electronic with id " + id + " does not exist");
+
+        return mapper.fromEntity(entity.get());
+    }
+
+    @Override
+    public Electronic update(Electronic electronic) {
+
+        ElectronicEntity entity = mapper.toEntity(electronic);
+
+        return mapper.fromEntity(repository.save(entity));
     }
 }

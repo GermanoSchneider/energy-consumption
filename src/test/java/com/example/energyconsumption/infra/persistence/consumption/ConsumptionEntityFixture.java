@@ -2,6 +2,7 @@ package com.example.energyconsumption.infra.persistence.consumption;
 
 import static lombok.AccessLevel.PRIVATE;
 
+import com.example.energyconsumption.infra.persistence.electronic.ElectronicEntity;
 import com.example.energyconsumption.infra.persistence.electronic.ElectronicEntityFixture;
 import java.time.LocalDateTime;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,21 @@ class ConsumptionEntityFixture {
             currentTime,
             currentTime.plusHours(1),
             ElectronicEntityFixture.build()
+        );
+    }
+
+    static ConsumptionEntity buildWith(
+        Long id,
+        LocalDateTime initialTime,
+        LocalDateTime endTime,
+        ElectronicEntity electronic
+    ) {
+
+        return new ConsumptionEntity(
+            id,
+            initialTime,
+            endTime,
+            electronic
         );
     }
 }

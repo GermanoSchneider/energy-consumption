@@ -9,7 +9,7 @@ import com.example.energyconsumption.domain.Electronic;
 import com.example.energyconsumption.domain.ElectronicFixture;
 import com.example.energyconsumption.domain.ElectronicRepository;
 import java.util.Collection;
-import java.util.Optional;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,9 +52,55 @@ class ElectronicRepositoryTest {
 
         Electronic expectedElectronic = ElectronicFixture.build();
 
-        Optional<Electronic> electronic = repository.findBy(1L);
+        Electronic electronic = repository.findBy(1L);
 
         assertThat(electronic).isNotNull();
-        assertThat(expectedElectronic).isEqualTo(electronic.get());
+        assertThat(expectedElectronic).isEqualTo(electronic);
+    }
+
+    @Test
+    @DisplayName("should thrown an exception when a electronic could not be found by ID")
+    void shouldThrowExceptionWhenElectronicCouldNotBeFoundById() {
+
+        Electronic electronic = ElectronicFixture.build()
+            .toBuilder()
+            .id(20L)
+            .build();
+
+        Long electronicId = electronic.getId();
+
+        String expectedMessage = "Electronic with id " + electronicId + " does not exist";
+
+        Exception exception = org.junit.jupiter.api.Assertions.assertThrows(
+            RuntimeException.class, () ->
+                repository.findBy(electronicId)
+        );
+
+        Assertions.assertThat(exception.getMessage()).isEqualTo(expectedMessage);
+    }
+
+    @Test
+    @DisplayName("should update electronic data")
+    void shouldUpdateElectronicData() {
+
+        Electronic electronic = ElectronicFixture.build();
+
+        Electronic updatedElectronic = ElectronicFixture.build()
+            .toBuilder().status(ON).build();
+
+        Long electronicId = electronic.getId();
+
+        ElectronicEntity electronicBeforeUpdate = findElectronicBy(electronicId);
+        Assertions.assertThat(electronic).isEqualTo(mapper.fromEntity(electronicBeforeUpdate));
+
+        repository.update(updatedElectronic);
+
+        ElectronicEntity electronicAfterUpdate = findElectronicBy(electronicId);
+        Assertions.assertThat(updatedElectronic).isEqualTo(mapper.fromEntity(electronicAfterUpdate));
+    }
+
+    private ElectronicEntity findElectronicBy(Long id) {
+
+        return entityManager.find(ElectronicEntity.class, id);
     }
 }
