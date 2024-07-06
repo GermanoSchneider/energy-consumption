@@ -26,7 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class EnergyConsumptionApplicationTest {
 
     @InjectMocks
-    private ElectronicApplicationService electronicApplicationService;
+    private EnergyConsumptionApplication energyConsumptionApplication;
 
     @Mock
     private ElectronicRepository electronicRepository;
@@ -79,7 +79,7 @@ class EnergyConsumptionApplicationTest {
             .when(energyConsumptionService)
             .start(consumption);
 
-        electronicApplicationService.powerOn(electronicId);
+        energyConsumptionApplication.powerOn(electronicId);
 
         Assertions.assertThat(consumption)
             .usingRecursiveComparison()
@@ -111,7 +111,7 @@ class EnergyConsumptionApplicationTest {
 
         Exception exception = org.junit.jupiter.api.Assertions.assertThrows(
             RuntimeException.class, () ->
-                electronicApplicationService.powerOn(electronicId)
+                energyConsumptionApplication.powerOn(electronicId)
         );
 
         Assertions.assertThat(exception.getMessage()).isEqualTo(expectedMessage);
@@ -160,7 +160,7 @@ class EnergyConsumptionApplicationTest {
             .when(consumptionRepository)
             .update(consumptionArgumentCaptor.capture());
 
-        electronicApplicationService.powerOff(electronicId);
+        energyConsumptionApplication.powerOff(electronicId);
 
         Assertions.assertThat(updatedConsumption)
                 .usingRecursiveComparison()
@@ -192,7 +192,7 @@ class EnergyConsumptionApplicationTest {
         String expectedMessage = "Computer is already powered off";
 
         Exception exception = org.junit.jupiter.api.Assertions.assertThrows(
-            RuntimeException.class, () -> electronicApplicationService.powerOff(electronicId)
+            RuntimeException.class, () -> energyConsumptionApplication.powerOff(electronicId)
         );
 
         Assertions.assertThat(exception.getMessage()).isEqualTo(expectedMessage);
@@ -223,7 +223,7 @@ class EnergyConsumptionApplicationTest {
             .when(consumptionRepository)
             .findBy(electronicId);
 
-        Collection<Consumption> consumptions = electronicApplicationService
+        Collection<Consumption> consumptions = energyConsumptionApplication
             .getAllConsumptionsBy(electronicId);
 
         Assertions.assertThat(expectedConsumptions).hasSameElementsAs(consumptions);
@@ -251,7 +251,7 @@ class EnergyConsumptionApplicationTest {
             .when(electronicRepository)
             .findAll();
 
-        Collection<Electronic> electronics = electronicApplicationService.getAllElectronics();
+        Collection<Electronic> electronics = energyConsumptionApplication.getAllElectronics();
 
         Assertions.assertThat(expectedElectronics).hasSameElementsAs(electronics);
 
