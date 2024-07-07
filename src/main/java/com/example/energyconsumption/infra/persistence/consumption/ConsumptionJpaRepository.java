@@ -9,6 +9,6 @@ interface ConsumptionJpaRepository extends JpaRepository<ConsumptionEntity, Long
     Collection<ConsumptionEntity> findByElectronicId(Long id);
 
     @Query("SELECT c FROM ConsumptionEntity c WHERE c.electronic.id = ?1 AND "
-        + "c.endTime is null ORDER BY c.initialTime DESC")
+        + "c.endTime is null ORDER BY c.initialTime DESC LIMIT 1")
     ConsumptionEntity findLastBy(Long electronicId);
 }

@@ -11,7 +11,7 @@ import java.util.Collection;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EnergyConsumptionApplication {
+public class EnergyConsumptionApplicationService {
 
     private final ElectronicRepository electronicRepository;
 
@@ -19,7 +19,7 @@ public class EnergyConsumptionApplication {
 
     private final EnergyConsumptionService energyConsumptionService;
 
-    public EnergyConsumptionApplication(
+    public EnergyConsumptionApplicationService(
         ElectronicRepository electronicRepository,
         ConsumptionRepository consumptionRepository,
         EnergyConsumptionService energyConsumptionService

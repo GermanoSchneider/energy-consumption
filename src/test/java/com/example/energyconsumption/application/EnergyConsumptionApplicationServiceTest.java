@@ -23,10 +23,10 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-class EnergyConsumptionApplicationTest {
+class EnergyConsumptionApplicationServiceTest {
 
     @InjectMocks
-    private EnergyConsumptionApplication energyConsumptionApplication;
+    private EnergyConsumptionApplicationService energyConsumptionApplicationService;
 
     @Mock
     private ElectronicRepository electronicRepository;
@@ -79,7 +79,7 @@ class EnergyConsumptionApplicationTest {
             .when(energyConsumptionService)
             .start(consumption);
 
-        energyConsumptionApplication.powerOn(electronicId);
+        energyConsumptionApplicationService.powerOn(electronicId);
 
         Assertions.assertThat(consumption)
             .usingRecursiveComparison()
@@ -111,7 +111,7 @@ class EnergyConsumptionApplicationTest {
 
         Exception exception = org.junit.jupiter.api.Assertions.assertThrows(
             RuntimeException.class, () ->
-                energyConsumptionApplication.powerOn(electronicId)
+                energyConsumptionApplicationService.powerOn(electronicId)
         );
 
         Assertions.assertThat(exception.getMessage()).isEqualTo(expectedMessage);
@@ -160,7 +160,7 @@ class EnergyConsumptionApplicationTest {
             .when(consumptionRepository)
             .update(consumptionArgumentCaptor.capture());
 
-        energyConsumptionApplication.powerOff(electronicId);
+        energyConsumptionApplicationService.powerOff(electronicId);
 
         Assertions.assertThat(updatedConsumption)
                 .usingRecursiveComparison()
@@ -192,7 +192,7 @@ class EnergyConsumptionApplicationTest {
         String expectedMessage = "Computer is already powered off";
 
         Exception exception = org.junit.jupiter.api.Assertions.assertThrows(
-            RuntimeException.class, () -> energyConsumptionApplication.powerOff(electronicId)
+            RuntimeException.class, () -> energyConsumptionApplicationService.powerOff(electronicId)
         );
 
         Assertions.assertThat(exception.getMessage()).isEqualTo(expectedMessage);
@@ -223,7 +223,7 @@ class EnergyConsumptionApplicationTest {
             .when(consumptionRepository)
             .findBy(electronicId);
 
-        Collection<Consumption> consumptions = energyConsumptionApplication
+        Collection<Consumption> consumptions = energyConsumptionApplicationService
             .getAllConsumptionsBy(electronicId);
 
         Assertions.assertThat(expectedConsumptions).hasSameElementsAs(consumptions);
@@ -251,7 +251,7 @@ class EnergyConsumptionApplicationTest {
             .when(electronicRepository)
             .findAll();
 
-        Collection<Electronic> electronics = energyConsumptionApplication.getAllElectronics();
+        Collection<Electronic> electronics = energyConsumptionApplicationService.getAllElectronics();
 
         Assertions.assertThat(expectedElectronics).hasSameElementsAs(electronics);
 

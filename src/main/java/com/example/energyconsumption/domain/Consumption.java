@@ -4,6 +4,7 @@ import static com.example.energyconsumption.domain.ConstraintValidator.validate;
 import static lombok.AccessLevel.PRIVATE;
 
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import lombok.AllArgsConstructor;
@@ -27,13 +28,17 @@ public class Consumption {
     @NotNull(message = "should not be null")
     Electronic electronic;
 
-    public Double getKilowatts() {
+    public BigDecimal getKilowatts() {
 
-        return electronic.getPowerKilowatts() * (getTotalMinutes() / 60);
+        Long totalMinutes = getTotalMinutes();
+
+        BigDecimal calc = new BigDecimal(electronic.getPowerKilowatts() * totalMinutes / 60.0);
+
+        return calc.setScale(4, BigDecimal.ROUND_HALF_UP);
     }
 
     private Long getTotalMinutes() {
-        return ChronoUnit.MINUTES.between(initialTime, endTime);
+        return ChronoUnit.MINUTES.between(initialTime, LocalDateTime.now());
     }
 
     public static class ConsumptionBuilder {

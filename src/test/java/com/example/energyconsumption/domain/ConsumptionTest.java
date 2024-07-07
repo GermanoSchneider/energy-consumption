@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import jakarta.validation.ConstraintViolationException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -41,11 +43,8 @@ class ConsumptionTest {
     @DisplayName("calculate the energy consumption")
     void shouldCalculateTheEnergyConsumption() {
 
-        double powerWatts = 20.0;
+        double powerWatts = 15.5;
         double powerKilowatts = powerWatts / 1000.0;
-        int hours = 9;
-
-        Double expectedKilowatts = powerKilowatts * hours;
 
         Electronic electronic  = ElectronicFixture.build().toBuilder()
             .powerWatts(powerWatts)
@@ -55,18 +54,22 @@ class ConsumptionTest {
             .withHour(9)
             .withMinute(10);
 
-        LocalDateTime endTime = LocalDateTime.now()
-            .withHour(18)
-            .withMinute(30);
+        Long totalMinutes = getTotalMinutes(initialTime, LocalDateTime.now());
+
+        BigDecimal expectedKilowatts = new BigDecimal(powerKilowatts * totalMinutes / 60).setScale(4,
+            BigDecimal.ROUND_HALF_UP);
 
         Consumption consumption = ConsumptionFixture.build()
             .toBuilder()
             .initialTime(initialTime)
-            .endTime(endTime)
             .electronic(electronic)
             .build();
 
         assertThat(consumption.getKilowatts())
             .isEqualTo(expectedKilowatts);
+    }
+
+    private Long getTotalMinutes(LocalDateTime initialTime, LocalDateTime endTime) {
+        return ChronoUnit.MINUTES.between(initialTime, endTime);
     }
 }
