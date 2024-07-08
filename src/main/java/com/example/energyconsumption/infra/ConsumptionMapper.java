@@ -1,19 +1,21 @@
-package com.example.energyconsumption.infra.persistence.consumption;
+package com.example.energyconsumption.infra;
 
 import com.example.energyconsumption.domain.Consumption;
-import com.example.energyconsumption.infra.persistence.electronic.ElectronicMapper;
+import com.example.energyconsumption.domain.Electronic;
+import com.example.energyconsumption.infra.persistence.consumption.ConsumptionEntity;
+import java.util.Collection;
 import org.springframework.stereotype.Component;
 
 @Component
-class ConsumptionMapper {
+public class ConsumptionMapper {
 
     private final ElectronicMapper mapper;
 
-    ConsumptionMapper(ElectronicMapper mapper) {
+    public ConsumptionMapper(ElectronicMapper mapper) {
         this.mapper = mapper;
     }
 
-    Consumption fromEntity(ConsumptionEntity entity) {
+    public Consumption fromEntity(ConsumptionEntity entity) {
 
         return Consumption.builder()
             .id(entity.getId())
@@ -23,13 +25,22 @@ class ConsumptionMapper {
             .build();
     }
 
-    ConsumptionEntity toEntity(Consumption consumption) {
+    public ConsumptionEntity toEntity(Consumption consumption) {
 
         return new ConsumptionEntity(
           consumption.getId(),
           consumption.getInitialTime(),
           consumption.getEndTime(),
           mapper.toEntity(consumption.getElectronic())
+        );
+    }
+
+    public ConsumptionDto toConsumptionDto(Consumption consumption) {
+
+        return new ConsumptionDto(
+            consumption.getId(),
+            consumption.getInitialTime(),
+            consumption.getEndTime()
         );
     }
 }

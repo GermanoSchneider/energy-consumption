@@ -1,6 +1,8 @@
-package com.example.energyconsumption.infra.persistence.electronic;
+package com.example.energyconsumption.infra;
 
 import com.example.energyconsumption.domain.Electronic;
+import com.example.energyconsumption.infra.persistence.electronic.ElectronicEntity;
+import java.util.Collection;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,6 +25,19 @@ public class ElectronicMapper {
           consumption.getName(),
           consumption.getPowerWatts(),
           consumption.getStatus()
+        );
+    }
+
+    public ElectronicDto toElectronicDto(
+        Electronic electronic,
+        Collection<ConsumptionDto> consumptions
+    ) {
+
+        return new ElectronicDto(
+            electronic.getId(),
+            electronic.getName(),
+            electronic.getStatus(),
+            consumptions
         );
     }
 }

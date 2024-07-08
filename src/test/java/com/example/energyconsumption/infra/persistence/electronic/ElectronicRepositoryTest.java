@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.example.energyconsumption.domain.Electronic;
 import com.example.energyconsumption.domain.ElectronicFixture;
 import com.example.energyconsumption.domain.ElectronicRepository;
+import com.example.energyconsumption.infra.ElectronicMapper;
 import java.util.Collection;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

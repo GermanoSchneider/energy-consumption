@@ -3,7 +3,10 @@ package com.example.energyconsumption.infra;
 import static java.lang.Long.MAX_VALUE;
 
 import com.example.energyconsumption.application.EnergyConsumptionApplicationService;
+import java.util.Collection;
 import java.util.Map;
+import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,14 +18,22 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 class EnergyConsumptionController {
 
     private final EnergyConsumptionApplicationService application;
+
+    private final ConsumptionMapper consumptionMapper;
+
+    private final ElectronicMapper electronicMapper;
+
     private final Map<Long, SseEmitter> emitters;
 
     EnergyConsumptionController(
         Map<Long, SseEmitter> emitters,
-        EnergyConsumptionApplicationService application
+        EnergyConsumptionApplicationService application, ConsumptionMapper consumptionMapper,
+        ElectronicMapper electronicMapper
     ) {
         this.emitters = emitters;
         this.application = application;
+        this.consumptionMapper = consumptionMapper;
+        this.electronicMapper = electronicMapper;
     }
 
     @GetMapping(path = "/open-sse/{electronicId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
@@ -54,5 +65,23 @@ class EnergyConsumptionController {
     void powerOff(@PathVariable String electronicId) {
 
         application.powerOff(Long.valueOf(electronicId));
+    }
+
+    @GetMapping(value = "/electronics", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Collection<ElectronicDto>> getAllElectronics() {
+
+        Collection<ElectronicDto> electronics = application.getAllElectronics().stream()
+            .map(electronic -> {
+                Collection<ConsumptionDto> consumptions = application
+                    .getAllConsumptionsBy(electronic.getId())
+                    .stream()
+                    .map(consumptionMapper::toConsumptionDto)
+                    .toList();
+                return electronicMapper.toElectronicDto(electronic, consumptions);
+            }).collect(Collectors.toList());
+
+        if (electronics.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+        return ResponseEntity.ok(electronics);
     }
 }
