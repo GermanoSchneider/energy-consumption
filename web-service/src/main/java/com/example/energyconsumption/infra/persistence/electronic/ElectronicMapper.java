@@ -36,6 +36,7 @@ public class ElectronicMapper {
         return new ElectronicDto(
             electronic.getId(),
             electronic.getName(),
+            electronic.getPowerKilowatts(),
             electronic.getStatus(),
             consumptions
         );

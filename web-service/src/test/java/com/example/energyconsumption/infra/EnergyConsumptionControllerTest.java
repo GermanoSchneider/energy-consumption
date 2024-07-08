@@ -87,7 +87,7 @@ class EnergyConsumptionControllerTest {
             .put(id, emitter);
 
         mockMvc.perform(
-            get("/open-sse/" + electronicId)
+            get("/open-sse")
         ).andExpect(status().isOk());
     }
 
@@ -206,6 +206,7 @@ class EnergyConsumptionControllerTest {
         return new ElectronicDto(
             electronic.getId(),
             electronic.getName(),
+            electronic.getPowerKilowatts(),
             electronic.getStatus(),
             consumptions
         );

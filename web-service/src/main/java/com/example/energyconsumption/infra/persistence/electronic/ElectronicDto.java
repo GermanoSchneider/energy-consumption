@@ -10,6 +10,8 @@ public record ElectronicDto(
 
     String name,
 
+    Double power,
+
     Status status,
 
     Collection<ConsumptionDto> consumptions

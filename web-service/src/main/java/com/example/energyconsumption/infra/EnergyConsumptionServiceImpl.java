@@ -6,10 +6,10 @@ import static org.springframework.web.servlet.mvc.method.annotation.SseEmitter.e
 import com.example.energyconsumption.domain.Consumption;
 import com.example.energyconsumption.domain.EnergyConsumptionService;
 import java.io.IOException;
-import java.util.Map;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -17,22 +17,22 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Service
 class EnergyConsumptionServiceImpl implements EnergyConsumptionService {
 
-    private final AtomicBoolean completed = new AtomicBoolean();
+    private final ConcurrentHashMap<Long, Boolean> completed = new ConcurrentHashMap<>();
 
-    private final ExecutorService executor = Executors.newFixedThreadPool(10);
+    private final Collection<SseEmitter> emitters;
 
-    private final Map<Long, SseEmitter> emitters;
-
-    EnergyConsumptionServiceImpl(Map<Long, SseEmitter> emitters) {
+    EnergyConsumptionServiceImpl(Collection<SseEmitter> emitters) {
         this.emitters = emitters;
     }
 
     @Override
     public void start(Consumption consumption) {
 
-        executor.submit(() -> {
+        completed.put(consumption.getId(), false);
 
-            while (!completed.get()) {
+        new Thread(() -> {
+
+            while (!completed.get(consumption.getId())) {
 
                 var event = event()
                     .id(consumption.getElectronic().getId().toString())
@@ -42,35 +42,29 @@ class EnergyConsumptionServiceImpl implements EnergyConsumptionService {
                 sendEvent(event);
 
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
 
+            completed.remove(consumption.getId());
 
-        });
+        }).start();
     }
 
     @Override
     public void stop(Consumption consumption) {
-
-        executor.shutdown();
-
-        SseEmitter emitter = emitters.get(consumption.getElectronic().getId());
-        emitter.complete();
-
-        completed.set(true);
+        completed.put(consumption.getId(), true);
     }
 
-    private void sendEvent(Set<DataWithMediaType> event) {
-
-        emitters.forEach((id, emitter) -> {
+    private void sendEvent(Set<DataWithMediaType> event)  {
+        for (SseEmitter emitter : emitters) {
             try {
                 emitter.send(event);
             } catch (IOException e) {
-                emitter.completeWithError(e);
+                throw new RuntimeException(e);
             }
-        });
+        }
     }
 }

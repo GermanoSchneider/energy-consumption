@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,10 +28,10 @@ class EnergyConsumptionController {
 
     private final ElectronicMapper electronicMapper;
 
-    private final Map<Long, SseEmitter> emitters;
+    private final Collection<SseEmitter> emitters;
 
     EnergyConsumptionController(
-        Map<Long, SseEmitter> emitters,
+        Collection<SseEmitter> emitters,
         EnergyConsumptionApplicationService application, ConsumptionMapper consumptionMapper,
         ElectronicMapper electronicMapper
     ) {
@@ -40,37 +41,41 @@ class EnergyConsumptionController {
         this.electronicMapper = electronicMapper;
     }
 
-    @GetMapping(path = "/open-sse/{electronicId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    ResponseEntity<SseEmitter> openSse(@PathVariable String electronicId) {
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = "/open-sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    ResponseEntity<SseEmitter> openSse() {
+
+        emitters.clear();
 
         SseEmitter emitter = new SseEmitter(MAX_VALUE);
 
-        Long id = Long.valueOf(electronicId);
-
-        emitter.onCompletion(() -> emitters.remove(id));
-        emitter.onTimeout(() -> emitters.remove(id));
+        emitter.onCompletion(() -> emitters.remove(emitter));
+        emitter.onTimeout(() -> emitters.remove(emitter));
         emitter.onError(throwable -> {
-            emitters.remove(id);
+            emitters.remove(emitter);
             emitter.completeWithError(throwable);
         });
 
-        emitters.put(id, emitter);
+        emitters.add(emitter);
 
         return ResponseEntity.ok(emitter);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(value = "/power-on/{electronicId}")
     void powerOn(@PathVariable String electronicId) {
 
         application.powerOn(Long.valueOf(electronicId));
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(value = "/power-off/{electronicId}")
     void powerOff(@PathVariable String electronicId) {
 
         application.powerOff(Long.valueOf(electronicId));
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(value = "/electronics", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Collection<ElectronicDto>> getAllElectronics() {
 

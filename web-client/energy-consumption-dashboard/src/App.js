@@ -1,23 +1,33 @@
-import logo from './logo.svg';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import './App.css';
+import { findAllElectronics } from './api';
+import ElectronicList from './pages/ElectronicList';
+import { setElectronics } from './reducers/electronics-reducer';
+import Collapsible from './components/Collapsible';
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+
+    findAllElectronics()
+      .then(response => dispatch(setElectronics(response.data)))
+      .catch(error => console.error('Error fetching electronics data:', error));
+
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+        <h1>Energy Consumption Simulator</h1>
       </header>
+      <div className="container">
+        <div className="column">
+          <ElectronicList />
+        </div>
+      </div>
     </div>
   );
 }

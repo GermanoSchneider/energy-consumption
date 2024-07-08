@@ -38,7 +38,7 @@ class ElectronicRepositoryTest {
         Electronic[] expectedElectronics = {
             buildWith(1L, "Computer", 15.5, OFF),
             buildWith(2L, "Shower", 10.8, OFF),
-            buildWith(3L, "Air Conditioner", 20.5, ON)
+            buildWith(3L, "Air Conditioner", 20.5, OFF)
         };
 
         Collection<Electronic> electronics = repository.findAll();
