@@ -1,9 +1,7 @@
-package com.example.energyconsumption.infra;
+package com.example.energyconsumption.infra.persistence.consumption;
 
 import com.example.energyconsumption.domain.Consumption;
-import com.example.energyconsumption.domain.Electronic;
-import com.example.energyconsumption.infra.persistence.consumption.ConsumptionEntity;
-import java.util.Collection;
+import com.example.energyconsumption.infra.persistence.electronic.ElectronicMapper;
 import org.springframework.stereotype.Component;
 
 @Component

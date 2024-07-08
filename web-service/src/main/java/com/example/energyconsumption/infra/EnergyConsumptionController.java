@@ -3,6 +3,10 @@ package com.example.energyconsumption.infra;
 import static java.lang.Long.MAX_VALUE;
 
 import com.example.energyconsumption.application.EnergyConsumptionApplicationService;
+import com.example.energyconsumption.infra.persistence.consumption.ConsumptionDto;
+import com.example.energyconsumption.infra.persistence.consumption.ConsumptionMapper;
+import com.example.energyconsumption.infra.persistence.electronic.ElectronicDto;
+import com.example.energyconsumption.infra.persistence.electronic.ElectronicMapper;
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package com.example.energyconsumption.infra;
+package com.example.energyconsumption.infra.persistence.consumption;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;

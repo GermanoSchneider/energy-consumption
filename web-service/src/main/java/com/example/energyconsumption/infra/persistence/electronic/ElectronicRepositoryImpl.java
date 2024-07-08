@@ -2,7 +2,6 @@ package com.example.energyconsumption.infra.persistence.electronic;
 
 import com.example.energyconsumption.domain.Electronic;
 import com.example.energyconsumption.domain.ElectronicRepository;
-import com.example.energyconsumption.infra.ElectronicMapper;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;

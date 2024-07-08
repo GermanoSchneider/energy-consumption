@@ -2,7 +2,6 @@ package com.example.energyconsumption.infra.persistence.consumption;
 
 import com.example.energyconsumption.domain.Consumption;
 import com.example.energyconsumption.domain.ConsumptionRepository;
-import com.example.energyconsumption.infra.ConsumptionMapper;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
