@@ -166,6 +166,25 @@ class EnergyConsumptionControllerTest {
         Mockito.verify(electronicMapper).toElectronicDto(computer, consumptionsDTO);
     }
 
+    @Test
+    @DisplayName("should not find any electronic")
+    void shouldNotFindAnyElectronic() throws Exception {
+
+        doReturn(List.of())
+            .when(applicationService)
+            .getAllElectronics();
+
+        MvcResult result = mockMvc.perform(
+            get("/electronics")
+        ).andReturn();
+
+        int statusCode = result.getResponse().getStatus();
+
+        Assertions.assertThat(HttpStatus.NO_CONTENT.value()).isEqualTo(statusCode);
+
+        Mockito.verify(applicationService).getAllElectronics();
+    }
+
     private ConsumptionDto toConsumptionDto(Consumption consumption) {
 
         return new ConsumptionDto(
