@@ -46,17 +46,17 @@ class ConsumptionTest {
         double powerWatts = 15.5;
         double powerKilowatts = powerWatts / 1000.0;
 
-        Electronic electronic  = ElectronicFixture.build().toBuilder()
+        Electronic electronic  = ElectronicFixture.build()
+            .toBuilder()
             .powerWatts(powerWatts)
             .build();
 
-        LocalDateTime initialTime = LocalDateTime.now()
-            .withHour(9)
-            .withMinute(10);
+        LocalDateTime initialTime = LocalDateTime.now().minusSeconds(40);
 
-        Long totalMinutes = getTotalMinutes(initialTime, LocalDateTime.now());
+        Long totalSeconds = getTotalMinutes(initialTime, LocalDateTime.now());
 
-        BigDecimal expectedKilowatts = new BigDecimal(powerKilowatts * totalMinutes / 60).setScale(4,
+        BigDecimal expectedKilowatts = new BigDecimal(powerKilowatts * totalSeconds / 3600.0)
+            .setScale(4,
             BigDecimal.ROUND_HALF_UP);
 
         Consumption consumption = ConsumptionFixture.build()
@@ -70,6 +70,6 @@ class ConsumptionTest {
     }
 
     private Long getTotalMinutes(LocalDateTime initialTime, LocalDateTime endTime) {
-        return ChronoUnit.MINUTES.between(initialTime, endTime);
+        return ChronoUnit.SECONDS.between(initialTime, endTime);
     }
 }

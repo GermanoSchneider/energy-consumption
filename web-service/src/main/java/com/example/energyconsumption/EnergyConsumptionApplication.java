@@ -18,8 +18,8 @@ public class EnergyConsumptionApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		jdbcTemplate.execute("INSERT INTO t_electronic VALUES (1, 'Computer', 15.5, 'OFF')");
-		jdbcTemplate.execute("INSERT INTO t_electronic VALUES (2, 'Shower', 10.8, 'OFF')");
-		jdbcTemplate.execute("INSERT INTO t_electronic VALUES (3, 'Air Conditioner', 20.5, 'OFF')");
+		jdbcTemplate.execute("INSERT IGNORE INTO t_electronic VALUES (1, 'Computer', 15.5, 'OFF')");
+		jdbcTemplate.execute("INSERT IGNORE INTO t_electronic VALUES (2, 'Shower', 10.8, 'OFF')");
+		jdbcTemplate.execute("INSERT IGNORE INTO t_electronic VALUES (3, 'Air Conditioner', 20.5, 'OFF')");
 	}
 }

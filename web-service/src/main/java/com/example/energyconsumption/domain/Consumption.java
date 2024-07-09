@@ -30,15 +30,15 @@ public class Consumption {
 
     public BigDecimal getKilowatts() {
 
-        Long totalMinutes = getTotalMinutes();
+        Long totalSeconds = getTotalSeconds();
 
-        BigDecimal calc = new BigDecimal(electronic.getPowerKilowatts() * totalMinutes / 60.0);
+        BigDecimal calc = new BigDecimal(electronic.getPowerKilowatts() * totalSeconds / 3600.0);
 
         return calc.setScale(4, BigDecimal.ROUND_HALF_UP);
     }
 
-    private Long getTotalMinutes() {
-        return ChronoUnit.MINUTES.between(initialTime, LocalDateTime.now());
+    private Long getTotalSeconds() {
+        return ChronoUnit.SECONDS.between(initialTime, LocalDateTime.now());
     }
 
     public static class ConsumptionBuilder {

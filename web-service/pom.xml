@@ -72,6 +72,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>energy-consumption-simulator</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

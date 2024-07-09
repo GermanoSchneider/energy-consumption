@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  frontend:
+    image: web-client
+    build:
+      context: ./web-client/energy-consumption-simulator
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+  backend:
+    image: web-service
+    build:
+      context: ./web-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: "jdbc:mysql://database:3306/energy_consumption_db"
+  database:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: "energy_consumption_db"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_PASSWORD: "root"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    restart: always
