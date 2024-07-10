@@ -97,8 +97,8 @@ header {
   overflow: hidden;
   max-height: 0;
   height: auto;
+  padding-left: 15px;
   transition: max-height 0.3s ease-out;
-  text-align: center;
 }
 
 .collapsible-content.open {

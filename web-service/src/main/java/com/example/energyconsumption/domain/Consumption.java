@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -32,13 +33,15 @@ public class Consumption {
 
         Long totalSeconds = getTotalSeconds();
 
-        BigDecimal calc = new BigDecimal(electronic.getPowerKilowatts() * totalSeconds / 3600.0);
+        BigDecimal calc = new BigDecimal(electronic.getPowerWatts() * totalSeconds / 3600.0);
 
-        return calc.setScale(4, BigDecimal.ROUND_HALF_UP);
+        return calc.setScale(5, BigDecimal.ROUND_HALF_UP);
     }
 
-    private Long getTotalSeconds() {
-        return ChronoUnit.SECONDS.between(initialTime, LocalDateTime.now());
+    public Long getTotalSeconds() {
+        return ChronoUnit.SECONDS.between(
+            initialTime,
+            Objects.isNull(endTime) ? LocalDateTime.now() : endTime);
     }
 
     public static class ConsumptionBuilder {

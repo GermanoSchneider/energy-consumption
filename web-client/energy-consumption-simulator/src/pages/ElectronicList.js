@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Collapsible from "../components/Collapsible";
 import Electronic from "../components/Electronic";
 import { setMessages } from "../reducers/message-reducer";
-import Collapsible from "../components/Collapsible";
-import moment from "moment/moment";
+import { convertSeconds } from "../utils";
 
 function ElectronicList() {
 
@@ -19,7 +19,8 @@ function ElectronicList() {
 
       const newMessage = {
         id: event.lastEventId,
-        data: JSON.parse(event.data)
+        data: JSON.parse(JSON.parse(event.data).kilowatts),
+        seconds: JSON.parse(JSON.parse(event.data).time)
       }
 
       dispatch(setMessages(newMessage))
@@ -35,11 +36,6 @@ function ElectronicList() {
     };
   }, [dispatch]);
 
-  const formatDate = (date) => {
-    console.log(moment(date).format('YYYY-MM-DDTHH:mm:ss'))
-    return moment(date).format('YYYY-MM-DDTHH:mm:ss')
-  };
-
   return (
     <div>
       {electronics.map((electronic, index) => (
@@ -53,7 +49,7 @@ function ElectronicList() {
           />
           <Collapsible title={electronic.consumptions.length + ' consumptions'}>
             {electronic.consumptions.map((consumption, index) => (
-              <p>{formatDate(consumption.initialTime)} - {formatDate(consumption.endTime)}</p>
+              <p key={index}>{index} - <b>{consumption.kilowatts} kW</b> in {convertSeconds(consumption.seconds)}</p>
             ))}
           </Collapsible>
         </div>

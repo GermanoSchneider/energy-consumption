@@ -4,7 +4,6 @@ import './App.css';
 import { findAllElectronics } from './api';
 import ElectronicList from './pages/ElectronicList';
 import { setElectronics } from './reducers/electronics-reducer';
-import Collapsible from './components/Collapsible';
 
 function App() {
 

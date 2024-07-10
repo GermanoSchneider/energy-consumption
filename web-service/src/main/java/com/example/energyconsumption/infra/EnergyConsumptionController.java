@@ -8,7 +8,6 @@ import com.example.energyconsumption.infra.persistence.consumption.ConsumptionMa
 import com.example.energyconsumption.infra.persistence.electronic.ElectronicDto;
 import com.example.energyconsumption.infra.persistence.electronic.ElectronicMapper;
 import java.util.Collection;
-import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

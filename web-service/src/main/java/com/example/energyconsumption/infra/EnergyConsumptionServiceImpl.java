@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -34,15 +33,20 @@ class EnergyConsumptionServiceImpl implements EnergyConsumptionService {
 
             while (!completed.get(consumption.getId())) {
 
+                var map = new HashMap<>();
+
+                map.put("kilowatts", consumption.getKilowatts());
+                map.put("time", consumption.getTotalSeconds());
+
                 var event = event()
                     .id(consumption.getElectronic().getId().toString())
-                    .data(consumption.getKilowatts())
+                    .data(map)
                     .build();
 
                 sendEvent(event);
 
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(200);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

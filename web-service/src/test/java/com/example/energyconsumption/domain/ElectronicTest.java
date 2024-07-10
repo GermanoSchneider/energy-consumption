@@ -53,21 +53,4 @@ class ElectronicTest {
         Electronic electronic = ElectronicFixture.build();
         assertThat(electronic.isOff()).isTrue();
     }
-
-    @Test
-    @DisplayName("should convert the power watts to kilowatts")
-    void shouldReturnPowerInKilowatts() {
-
-        double powerWatts = 20.0;
-
-        Electronic electronic = ElectronicFixture
-            .build()
-            .toBuilder()
-            .powerWatts(powerWatts)
-            .build();
-
-        double expectedKilowatts = 0.02;
-
-        assertThat(electronic.getPowerKilowatts()).isEqualTo(expectedKilowatts);
-    }
 }

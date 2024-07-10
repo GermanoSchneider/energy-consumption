@@ -26,11 +26,6 @@ public class Electronic {
     @NotNull(message = "should not be null")
     Status status;
 
-    public Double getPowerKilowatts() {
-
-        return powerWatts / 1000.0;
-    }
-
     public boolean isOn() {
         return status == Status.ON;
     }

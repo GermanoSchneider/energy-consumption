@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { findAllElectronics, powerOff, powerOn } from "../api";
 import { setElectronics } from "../reducers/electronics-reducer";
+import { convertSeconds } from "../utils";
 
 function Electronic({electronicId, name, power, status}) {
 
     const style = {
-        backgroundColor: status == 'ON' ? '#0EBB35' : '#E31111'
+        backgroundColor: status === 'ON' ? '#0EBB35' : '#E31111'
     }
 
     const { messages } = useSelector(state => state.messages);
@@ -14,7 +15,7 @@ function Electronic({electronicId, name, power, status}) {
 
     const powerElectronic = async () => {
 
-        if (status == 'ON') {
+        if (status === 'ON') {
             await powerOff(electronicId).then(async () => await updateElectronics());
         } else {
             await powerOn(electronicId).then(async () => await updateElectronics());
@@ -23,6 +24,12 @@ function Electronic({electronicId, name, power, status}) {
 
     const updateElectronics = async () => await findAllElectronics().then(response => dispatch(setElectronics(response.data))) 
     
+    const buildElectronicData = (messages) => {
+        let filteredMessages = messages.find((message) => message.id == electronicId);
+        if (filteredMessages) {
+            return filteredMessages.data + "kW - " + convertSeconds(filteredMessages.seconds);
+        }
+    }
 
     return (
         <div className="electronic-box">
@@ -36,7 +43,7 @@ function Electronic({electronicId, name, power, status}) {
                 </div>
             </div>
             <div className="consumption">
-                <p>{messages.find((message) => message.id == electronicId)?.data}</p>
+                <p>{buildElectronicData(messages)}</p>
             </div>
         </div>
     )

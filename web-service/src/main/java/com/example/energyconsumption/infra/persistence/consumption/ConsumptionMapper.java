@@ -38,7 +38,9 @@ public class ConsumptionMapper {
         return new ConsumptionDto(
             consumption.getId(),
             consumption.getInitialTime(),
-            consumption.getEndTime()
+            consumption.getEndTime(),
+            consumption.getKilowatts(),
+            consumption.getTotalSeconds()
         );
     }
 }

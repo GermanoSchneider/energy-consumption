@@ -138,7 +138,7 @@ class EnergyConsumptionControllerTest {
 
         Collection<Consumption> consumptions = List.of(consumption);
 
-        Collection<ConsumptionDto> consumptionsDTO = List.of(toConsumptionDto(consumption));
+        Collection<ConsumptionDto> consumptionsDto = List.of(toConsumptionDto(consumption));
 
         doReturn(electronics)
             .when(applicationService)
@@ -149,7 +149,7 @@ class EnergyConsumptionControllerTest {
             .getAllConsumptionsBy(electronicId);
 
         Collection<ElectronicDto> expectedElectronics = electronics.stream()
-            .map(electronic -> toElectronicDto(electronic, consumptionsDTO))
+            .map(electronic -> toElectronicDto(electronic, consumptionsDto))
             .toList();
 
         String expectedJson = mapper.writeValueAsString(expectedElectronics);
@@ -167,7 +167,7 @@ class EnergyConsumptionControllerTest {
         Mockito.verify(applicationService).getAllElectronics();
         Mockito.verify(applicationService).getAllConsumptionsBy(electronicId);
         Mockito.verify(consumptionMapper).toConsumptionDto(consumption);
-        Mockito.verify(electronicMapper).toElectronicDto(computer, consumptionsDTO);
+        Mockito.verify(electronicMapper).toElectronicDto(computer, consumptionsDto);
     }
 
     @Test
@@ -194,7 +194,9 @@ class EnergyConsumptionControllerTest {
         return new ConsumptionDto(
             consumption.getId(),
             consumption.getInitialTime(),
-            consumption.getEndTime()
+            consumption.getEndTime(),
+            consumption.getKilowatts(),
+            consumption.getTotalSeconds()
         );
     }
 
@@ -206,7 +208,7 @@ class EnergyConsumptionControllerTest {
         return new ElectronicDto(
             electronic.getId(),
             electronic.getName(),
-            electronic.getPowerKilowatts(),
+            electronic.getPowerWatts(),
             electronic.getStatus(),
             consumptions
         );
